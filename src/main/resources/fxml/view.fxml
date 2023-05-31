@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane fx:id="anchor" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: grey;" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fricke.presenter.AbstractPresenter">
+    <fx:include fx:id="tableView" layoutX="178.0" layoutY="30.0" prefWidth="523.0" source="table.fxml" visible="false" />
+    <Pane prefHeight="600.0" prefWidth="176.0" styleClass="pane1">
+        <Button layoutY="108.0" mnemonicParsing="false" onAction="#onCreateTabPane" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Create Tab" textOverrun="CENTER_ELLIPSIS" />
+        <ImageView fx:id="imageView" fitHeight="107.0" fitWidth="166.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" styleClass="img-view" />
+        <Button layoutY="152.0" mnemonicParsing="false" onAction="#onClearDirectory" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Clear Directory" textOverrun="CENTER_ELLIPSIS" />
+        <Button layoutY="196.0" mnemonicParsing="false" onAction="#onOpenTableView" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Table View" textOverrun="CENTER_ELLIPSIS" />
+        <Button layoutY="240.0" mnemonicParsing="false" onAction="#onCloseTableView" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Table Close" textOverrun="CENTER_ELLIPSIS" />
+    </Pane>
+    <Pane fx:id="pane" layoutX="176.0" prefHeight="600.0" prefWidth="523.0" styleClass="pane1">
+        <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="523.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="tab" styleClass="tab" text="SendFile 0" userData="0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </Tab>
+        </TabPane>
+    </Pane>
+    <Line endX="175.0" endY="-7.629394644936838E-7" startX="176.0" startY="600.0" strokeLineCap="ROUND" strokeMiterLimit="50.0" strokeWidth="3.0">
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <light>
+                    <Light.Distant />
+                </light>
+                <bumpInput>
+                    <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                </bumpInput>
+            </Lighting>
+        </effect>
+        <cursor>
+            <Cursor fx:constant="E_RESIZE" />
+        </cursor>
+    </Line>
+    <Line endX="175.99998474121094" layoutY="3.0" startX="-1.220703143189894E-5" strokeWidth="3.0" />
+    <TextField fx:id="input" layoutX="700.0" prefHeight="32.0" prefWidth="185.0" promptText="Kunde- oder Artikelnummer" visible="false" />
+    <Button fx:id="search" layoutX="590.0" mnemonicParsing="false" onAction="#onFilter" prefHeight="20.0" prefWidth="100.0" text="Search" visible="false" />
+    <Button fx:id="reset" disable="true" layoutX="895.0" mnemonicParsing="false" onAction="#onReset" prefHeight="20.0" prefWidth="100.0" text="Reset" visible="false" />
+</AnchorPane>

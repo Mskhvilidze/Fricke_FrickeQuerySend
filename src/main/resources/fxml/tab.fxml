@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fricke.presenter.TabPresenter">
+    <Label fx:id="validator" alignment="CENTER" contentDisplay="CENTER" layoutX="85.0" prefHeight="63.0" prefWidth="410.0" textAlignment="CENTER" textFill="RED">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+    </Label>
+    <ProgressIndicator fx:id="progressBar" layoutX="200.0" layoutY="450.0" prefWidth="200.0" progress="0.0" />
+    <Label layoutX="85.0" layoutY="78.0" prefHeight="35.0" prefWidth="40.0" styleClass="label" text="Von">
+        <font>
+            <Font size="13.0" />
+        </font>
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="320.89" />
+                </light>
+            </Lighting>
+        </effect>
+    </Label>
+    <Label layoutX="364.0" layoutY="78.0" prefHeight="35.0" prefWidth="40.0" text="Bis" />
+    <TextField fx:id="from" layoutX="125.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+        <effect>
+            <Lighting diffuseConstant="1.99" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="304.07" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <TextField fx:id="to" layoutX="400.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="304.07" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <Label layoutX="88.0" layoutY="139.0" prefHeight="35.0" prefWidth="74.0" text="Status: NE" />
+    <TextField disable="true" layoutX="165.0" layoutY="139.0" prefHeight="35.0" prefWidth="27.0" style="-fx-background-color: snow;" text="D">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <Shadow height="0.0" radius="0.0" width="0.0">
+                        <input>
+                            <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                        </input>
+                    </Shadow>
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="280.51" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <Label layoutX="316.0" layoutY="139.0" prefHeight="35.0" prefWidth="150.0" text="Interne Aufträge: EQ" />
+    <TextField disable="true" layoutX="467.0" layoutY="139.0" prefHeight="35.0" prefWidth="27.0" promptText="N" style="-fx-background-color: snow;">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <Shadow height="1.0" radius="0.0" width="0.0">
+                        <input>
+                            <InnerShadow />
+                        </input>
+                    </Shadow>
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="297.34" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <Label layoutX="85.0" layoutY="203.0" prefHeight="35.0" prefWidth="134.0" text="Sachbearbeiter: NE" />
+    <TextField disable="true" layoutX="232.0" layoutY="199.0" prefHeight="35.0" prefWidth="66.0" promptText="PSHOP" style="-fx-background-color: snow;">
+        <font>
+            <Font name="Bookman Old Style Bold" size="13.0" />
+        </font>
+        <opaqueInsets>
+            <Insets />
+        </opaqueInsets>
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <Shadow height="0.0" radius="0.0" width="0.0">
+                        <input>
+                            <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                        </input>
+                    </Shadow>
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="273.79" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <Label layoutX="316.0" layoutY="203.0" prefHeight="35.0" prefWidth="48.0" text="Länder" />
+    <ComboBox fx:id="country" disable="true" layoutX="413.0" layoutY="199.0" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: cornsilk;">
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="37.76" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow choke="0.1" height="1.93" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="297.34" elevation="58.46" />
+                </light>
+            </Lighting>
+        </effect>
+    </ComboBox>
+    <Label layoutX="85.0" layoutY="263.0" prefHeight="18.0" prefWidth="48.0" text="Artikel" />
+    <TextField fx:id="articles" layoutX="228.0" layoutY="254.0" prefHeight="35.0" prefWidth="275.0" style="-fx-background-color: cornsilk;">
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="293.97" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <TextField fx:id="menuItems" editable="false" layoutX="228.0" layoutY="311.0" prefHeight="35.0" prefWidth="275.0" style="-fx-background-color: cornsilk;">
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow height="0.0" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="293.97" />
+                </light>
+            </Lighting>
+        </effect>
+    </TextField>
+    <MenuButton fx:id="menuButton" layoutX="87.0" layoutY="316.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="121.0" style="-fx-background-color: cornsilk;" text="Länder">
+        <effect>
+            <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="37.76" surfaceScale="10.0">
+                <bumpInput>
+                    <InnerShadow choke="0.1" height="1.93" radius="0.0" width="0.0" />
+                </bumpInput>
+                <light>
+                    <Light.Distant azimuth="297.34" elevation="58.46" />
+                </light>
+            </Lighting>
+        </effect>
+    </MenuButton>
+    <Button fx:id="create" layoutX="82.0" layoutY="386.0" mnemonicParsing="false" onAction="#onExecuteQuery" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Daten abrufen" textOverrun="CENTER_ELLIPSIS" />
+    <Button layoutX="340.0" layoutY="386.0" mnemonicParsing="false" onAction="#onSendFile" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Excel Datei senden" textOverrun="CENTER_ELLIPSIS" />
+</AnchorPane>

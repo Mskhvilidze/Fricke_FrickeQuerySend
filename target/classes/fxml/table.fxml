@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchor" prefHeight="550.0" prefWidth="523.0" stylesheets="/css/style.css"
+            xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="fricke.presenter.TableViewPresenter">
+    <ScrollPane fx:id="scrollPane" prefHeight="550.0" prefWidth="523.0" styleClass="table-view">
+        <AnchorPane fx:id="pane" minHeight="0.0" minWidth="0.0" prefHeight="535.0" prefWidth="523.0"
+                    styleClass="column-header-background">
+            <TableView fx:id="tableView" prefHeight="539.0" prefWidth="507.0">
+                <columns>
+                    <TableColumn fx:id="olordt" prefWidth="110.0" text="OLORDT"/>
+                    <TableColumn fx:id="olords" minWidth="0.0" prefWidth="110.0" text="OLORDS"/>
+                    <TableColumn fx:id="olcuno" prefWidth="110.0" text="OLCUNO"/>
+                    <TableColumn fx:id="olorno" minWidth="0.0" prefWidth="110.0" text="OLORNO"/>
+                    <TableColumn fx:id="olprdc" prefWidth="110.0" text="OLPRDC"/>
+                    <TableColumn fx:id="oldesc" prefWidth="110.0" text="OLDESC"/>
+                    <TableColumn fx:id="oloqty" prefWidth="110.0" text="OLOQTY"/>
+                    <TableColumn fx:id="olsalp" prefWidth="110.0" text="OLSALP"/>
+                    <TableColumn fx:id="olscpr" prefWidth="110.0" text="OLSCPR"/>
+                    <TableColumn fx:id="olitet" prefWidth="110.0" text="OLITET"/>
+                    <TableColumn fx:id="olcosp" prefWidth="110.0" text="OLCOSP"/>
+                    <TableColumn fx:id="olfocc" prefWidth="110.0" text="OLFOCC"/>
+                    <TableColumn fx:id="nacoun" prefWidth="110.0" text="NACOUN"/>
+                    <TableColumn fx:id="naname" prefWidth="110.0" text="NANAME"/>
+                    <TableColumn fx:id="ohexr3" prefWidth="110.0" text="OHEXR3"/>
+                    <TableColumn fx:id="ohpcur" prefWidth="110.0" text="OHPCUR"/>
+                    <TableColumn fx:id="ohodat" prefWidth="110.0" text="OHODAT"/>
+                    <TableColumn fx:id="pgpgrp" prefWidth="110.0" text="PGPGRP"/>
+                </columns>
+                <effect>
+                    <InnerShadow/>
+                </effect>
+            </TableView>
+        </AnchorPane>
+    </ScrollPane>
+</AnchorPane>
