@@ -6,52 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 @Getter
 public class BasketOfList {
-    private List<String> OLORDT = new ArrayList<>();
-    private List<String> OLORDS = new ArrayList<>();
-    private List<String> OLCUNO = new ArrayList<>();
-    private List<String> OLORNO = new ArrayList<>();
-    private List<String> OLPRDC = new ArrayList<>();
-    private List<String> OLDESC = new ArrayList<>();
-    private List<String> OLOQTY = new ArrayList<>();
+    private List<String> countries = new ArrayList<>();
+    private List<String> clients = new ArrayList<>();
+    private List<String> date = new ArrayList<>();
+    private List<String> ids = new ArrayList<>();
 
-    private List<String> OLSALP = new ArrayList<>();
-    private List<String> OLSCPR = new ArrayList<>();
-    private List<String> OLITET = new ArrayList<>();
-    private List<String> OLCOSP = new ArrayList<>();
-    private List<String> OLFOCC = new ArrayList<>();
-    private List<String> NACOUN = new ArrayList<>();
-
-    private List<String> NANAME = new ArrayList<>();
-    private List<String> OHEXR3 = new ArrayList<>();
-    private List<String> OHPCUR = new ArrayList<>();
-    private List<String> OHODAT = new ArrayList<>();
-    private List<String> PGPGRP = new ArrayList<>();
+    private List<String> articles = new ArrayList<>();
+    private List<String> sales_volume_action = new ArrayList<>();
+    private List<String> qty_action = new ArrayList<>();
+    private List<String> sales_volume_comparison = new ArrayList<>();
+    private List<String> qty_comparison = new ArrayList<>();
     private List<String> CTOTIC = new ArrayList<>();
 
-    public void add(String OLORDT, String OLORDS, String OLCUNO, String OLORNO, String OLPRDC, String OLDESC, String OLOQTY) {
-        this.OLORDT.add(OLORDT);
-        this.OLORDS.add(OLORDS);
-        this.OLCUNO.add(OLCUNO);
-        this.OLORNO.add(OLORNO);
-        this.OLPRDC.add(OLPRDC);
-        this.OLDESC.add(OLDESC);
-        this.OLOQTY.add(OLOQTY);
+
+    public void add(String OLPRDC, String sales_action, String qty_action, String sales_comparison, String qty_comparison){
+        this.articles.add(OLPRDC);
+        this.sales_volume_action.add(sales_action);
+        this.qty_action.add(qty_action);
+        this.sales_volume_comparison.add(sales_comparison);
+        this.qty_comparison.add(qty_comparison);
     }
 
-    public void add(String OLSALP, String OLSCPR, String OLITET, String OLCOSP, String OLFOCC, String NACOUN) {
-        this.OLSALP.add(OLSALP);
-        this.OLSCPR.add(OLSCPR);
-        this.OLITET.add(OLITET);
-        this.OLCOSP.add(OLCOSP);
-        this.OLFOCC.add(OLFOCC);
-        this.NACOUN.add(NACOUN);
-    }
-
-    public void add(String NANAME, String OHEXR3, String OHPCUR, String OHODAT, String PGPGRP){
-        this.NANAME.add(NANAME);
-        this.OHEXR3.add(OHEXR3);
-        this.OHPCUR.add(OHPCUR);
-        this.OHODAT.add(OHODAT);
-        this.PGPGRP.add(PGPGRP);
+    public void add(String country, String client, String date, String id){
+        this.countries.add(country);
+        this.clients.add(client);
+        this.date.add(date);
+        this.ids.add(id);
     }
 }

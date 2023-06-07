@@ -12,7 +12,7 @@
             <Font name="Bookman Old Style Bold" size="13.0" />
         </font>
     </Label>
-    <ProgressIndicator fx:id="progressBar" layoutX="200.0" layoutY="450.0" prefWidth="200.0" progress="0.0" />
+    <ProgressIndicator fx:id="progressBar" layoutX="200.0" layoutY="470.0" prefWidth="200.0" progress="0.0" />
     <Label layoutX="85.0" layoutY="78.0" prefHeight="35.0" prefWidth="40.0" styleClass="label" text="Von">
         <font>
             <Font size="13.0" />
@@ -29,7 +29,7 @@
         </effect>
     </Label>
     <Label layoutX="364.0" layoutY="78.0" prefHeight="35.0" prefWidth="40.0" text="Bis" />
-    <TextField fx:id="from" layoutX="125.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;">
+    <TextField fx:id="from" layoutX="125.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;" text="20230105">
         <font>
             <Font name="Bookman Old Style Bold" size="13.0" />
         </font>
@@ -44,7 +44,7 @@
             </Lighting>
         </effect>
     </TextField>
-    <TextField fx:id="to" layoutX="400.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;">
+    <TextField fx:id="to" layoutX="400.0" layoutY="79.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;" text="20230405">
         <font>
             <Font name="Bookman Old Style Bold" size="13.0" />
         </font>
@@ -59,8 +59,8 @@
             </Lighting>
         </effect>
     </TextField>
-    <Label layoutX="88.0" layoutY="139.0" prefHeight="35.0" prefWidth="74.0" text="Status: NE" />
-    <TextField disable="true" layoutX="165.0" layoutY="139.0" prefHeight="35.0" prefWidth="27.0" style="-fx-background-color: snow;" text="D">
+    <Label layoutX="88.0" layoutY="139.0" prefHeight="35.0" prefWidth="94.0" text="Newsletter ID" />
+    <TextField fx:id="newsletter" layoutX="190.0" layoutY="139.0" prefHeight="35.0" prefWidth="94.0" style="-fx-background-color: cornsilk;">
         <font>
             <Font name="Bookman Old Style Bold" size="13.0" />
         </font>
@@ -136,7 +136,7 @@
         </effect>
     </ComboBox>
     <Label layoutX="85.0" layoutY="263.0" prefHeight="18.0" prefWidth="48.0" text="Artikel" />
-    <TextField fx:id="articles" layoutX="228.0" layoutY="254.0" prefHeight="35.0" prefWidth="275.0" style="-fx-background-color: cornsilk;">
+    <TextField fx:id="articles" layoutX="228.0" layoutY="254.0" prefHeight="35.0" prefWidth="275.0" style="-fx-background-color: cornsilk;" text="'38099478', '11046624'">
         <effect>
             <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
                 <bumpInput>
@@ -172,6 +172,53 @@
             </Lighting>
         </effect>
     </MenuButton>
-    <Button fx:id="create" layoutX="82.0" layoutY="386.0" mnemonicParsing="false" onAction="#onExecuteQuery" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Daten abrufen" textOverrun="CENTER_ELLIPSIS" />
-    <Button layoutX="340.0" layoutY="386.0" mnemonicParsing="false" onAction="#onSendFile" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Excel Datei senden" textOverrun="CENTER_ELLIPSIS" />
+    <Button fx:id="create" layoutX="79.0" layoutY="444.0" mnemonicParsing="false" onAction="#onExecuteQuery" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Daten abrufen" textOverrun="CENTER_ELLIPSIS" />
+    <Button layoutX="340.0" layoutY="444.0" mnemonicParsing="false" onAction="#onSendFile" prefHeight="25.0" prefWidth="166.0" styleClass="button" text="Excel Datei senden" textOverrun="CENTER_ELLIPSIS" />
+   <Label alignment="CENTER" layoutX="165.0" layoutY="361.0" prefHeight="18.0" prefWidth="275.0" text="Vergleichzeitraum" />
+   <Label layoutX="85.0" layoutY="389.0" prefHeight="35.0" prefWidth="40.0" styleClass="label" text="Von">
+      <font>
+         <Font size="13.0" />
+      </font>
+      <effect>
+         <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+            <bumpInput>
+               <InnerShadow />
+            </bumpInput>
+            <light>
+               <Light.Distant azimuth="320.89" />
+            </light>
+         </Lighting>
+      </effect>
+   </Label>
+   <TextField fx:id="comparisonFrom" layoutX="125.0" layoutY="389.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;" text="20230305">
+      <font>
+         <Font name="Bookman Old Style Bold" size="13.0" />
+      </font>
+      <effect>
+         <Lighting diffuseConstant="1.99" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+            <bumpInput>
+               <InnerShadow height="0.0" radius="0.0" width="0.0" />
+            </bumpInput>
+            <light>
+               <Light.Distant azimuth="304.07" />
+            </light>
+         </Lighting>
+      </effect>
+   </TextField>
+   <Label layoutX="364.0" layoutY="389.0" prefHeight="35.0" prefWidth="40.0" text="Bis" />
+   <TextField fx:id="comparisonTo" layoutX="400.0" layoutY="389.0" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: cornsilk;" text="20230405">
+      <font>
+         <Font name="Bookman Old Style Bold" size="13.0" />
+      </font>
+      <effect>
+         <Lighting diffuseConstant="2.0" specularConstant="0.0" specularExponent="40.0" surfaceScale="10.0">
+            <bumpInput>
+               <InnerShadow height="0.0" radius="0.0" width="0.0" />
+            </bumpInput>
+            <light>
+               <Light.Distant azimuth="304.07" />
+            </light>
+         </Lighting>
+      </effect>
+   </TextField>
 </AnchorPane>

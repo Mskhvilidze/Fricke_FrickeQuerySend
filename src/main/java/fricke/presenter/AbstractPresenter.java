@@ -1,7 +1,6 @@
 package fricke.presenter;
 
 import fricke.ScannerManager;
-import fricke.model.BasketOfColumns;
 import fricke.model.DataBaseUserStore;
 import fricke.model.BasketOfList;
 import fricke.service.Service;
@@ -18,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -86,6 +86,7 @@ public class AbstractPresenter implements Initializable {
 
     @FXML
     private void onOpenTableView() {
+        List<String> comparisonDate = new ArrayList<>();
         if (Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()) == null) {
             Service.alert("Daten wurde nicht geladen", "Empty");
             return;
@@ -97,8 +98,12 @@ public class AbstractPresenter implements Initializable {
                 .getUserData()).get(2).split(","));
         List<String> articles = Arrays.asList(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem()
                 .getUserData()).get(3).split(","));
-        BasketOfList table1 = store.fillTableView(from.trim(), to.trim(), country, articles);
-        tableViewController.setTest(table1);
+        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(4));
+        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(5));
+        //in dieser Array auf der Index 2 ist auch newsletter gespeichert
+        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(6));
+        BasketOfList table1 = store.fillTableView(from.trim(), to.trim(), country, articles, comparisonDate);
+        tableViewController.setTable(table1);
         reSize(1700.0);
         toggleNodeVisible(search, input, reset, true);
     }

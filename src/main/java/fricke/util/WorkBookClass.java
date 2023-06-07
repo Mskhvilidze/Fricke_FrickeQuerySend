@@ -41,7 +41,7 @@ public class WorkBookClass {
              Workbook workbook = new XSSFWorkbook(inputStream)) {
             XSSFSheet sheet = (XSSFSheet) workbook.getSheetAt(0);
             XSSFRow row;
-            for (int i = 1; i <= basketOfList.getOLCUNO().size(); i++) {
+            for (int i = 1; i <= basketOfList.getArticles().size(); i++) {
                 row = sheet.createRow(i);
                 writeCellValue(row, i, basketOfList);
             }
@@ -98,26 +98,15 @@ public class WorkBookClass {
     }
 
     private void writeCellValue(XSSFRow row, int i, BasketOfList basketOfList) {
-        row.createCell(0).setCellValue(basketOfList.getOLORDT().get(i - 1));
-        row.createCell(1).setCellValue(basketOfList.getOLORDS().get(i - 1));
-        row.createCell(2).setCellValue(basketOfList.getOLCUNO().get(i - 1));
-        row.createCell(3).setCellValue(basketOfList.getOLORNO().get(i - 1));
-        row.createCell(4).setCellValue(basketOfList.getOLPRDC().get(i - 1));
-        row.createCell(5).setCellValue(basketOfList.getOLDESC().get(i - 1));
-        row.createCell(6).setCellValue(basketOfList.getOLOQTY().get(i - 1));
-
-        row.createCell(7).setCellValue(basketOfList.getOLSALP().get(i - 1));
-        row.createCell(8).setCellValue(basketOfList.getOLSCPR().get(i - 1));
-        row.createCell(9).setCellValue(basketOfList.getOLITET().get(i - 1));
-        row.createCell(10).setCellValue(basketOfList.getOLCOSP().get(i - 1));
-        row.createCell(11).setCellValue(basketOfList.getOLFOCC().get(i - 1));
-        row.createCell(12).setCellValue(basketOfList.getNACOUN().get(i - 1));
-
-        row.createCell(13).setCellValue(basketOfList.getNANAME().get(i - 1));
-        row.createCell(14).setCellValue(basketOfList.getOHEXR3().get(i - 1));
-        row.createCell(15).setCellValue(basketOfList.getOHPCUR().get(i - 1));
-        row.createCell(16).setCellValue(basketOfList.getOHODAT().get(i - 1));
-        row.createCell(17).setCellValue(basketOfList.getPGPGRP().get(i - 1));
+        row.createCell(0).setCellValue(basketOfList.getCountries().get(i - 1));
+        row.createCell(1).setCellValue(basketOfList.getClients().get(i - 1));
+        row.createCell(2).setCellValue(basketOfList.getDate().get(i - 1));
+        row.createCell(3).setCellValue(basketOfList.getIds().get(i - 1));
+        row.createCell(4).setCellValue(basketOfList.getArticles().get(i - 1));
+        row.createCell(5).setCellValue(basketOfList.getSales_volume_action().get(i - 1));
+        row.createCell(6).setCellValue(basketOfList.getQty_action().get(i - 1));
+        row.createCell(7).setCellValue(basketOfList.getSales_volume_comparison().get(i - 1));
+        row.createCell(8).setCellValue(basketOfList.getQty_comparison().get(i - 1));
     }
 
     //Cell wird erstellt und Kopfzeilen geschrieben
@@ -136,9 +125,8 @@ public class WorkBookClass {
     }
 
     private void initList() {
-        this.list = Arrays.asList("OLORDT", "OLORDS", "OLCUNO", "OLORNO", "OLPRDC", "OLDESC", "OLOQTY",
-                "OLSALP", "OLSCPR", "OLITET", "OLCOSP", "OLFOCC", "NACOUN",
-                "NANAME", "OHEXR3", "OHPCUR", "OHODAT", "PGPGRP");
+        this.list = Arrays.asList("Land", "Mandant", "Datum", "Newsletter_ID", "Artikelnummer", "Umsatz Aktionszeitraum",
+                "Menge Aktionszeitraum", "Umsatz Vergleichzeitraum", "Menge Vergleichzeitraum");
     }
 
     private String getPathFile(String filename) {

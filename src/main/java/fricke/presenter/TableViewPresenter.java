@@ -12,20 +12,6 @@ import javafx.scene.layout.AnchorPane;
 
 public class TableViewPresenter {
     @FXML
-    private TableColumn<BasketOfColumns, String> pgpgrp;
-    @FXML
-    private TableColumn<BasketOfColumns, String> ohodat;
-    @FXML
-    private TableColumn<BasketOfColumns, String> ohpcur;
-    @FXML
-    private TableColumn<BasketOfColumns, String> ohexr3;
-    @FXML
-    private TableColumn<BasketOfColumns, String> naname;
-    @FXML
-    private TableColumn<BasketOfColumns, String> nacoun;
-    @FXML
-    private TableColumn<BasketOfColumns, String> olfocc;
-    @FXML
     private TableColumn<BasketOfColumns, String> olcosp;
     @FXML
     private TableColumn<BasketOfColumns, String> olitet;
@@ -40,10 +26,6 @@ public class TableViewPresenter {
     @FXML
     private TableColumn<BasketOfColumns, String> olcuno;
     @FXML
-    private TableColumn<BasketOfColumns, String> olorno;
-    @FXML
-    private TableColumn<BasketOfColumns, String> olprdc;
-    @FXML
     private TableColumn<BasketOfColumns, String> oldesc;
     @FXML
     private TableColumn<BasketOfColumns, String> oloqty;
@@ -57,7 +39,7 @@ public class TableViewPresenter {
     private TableView<BasketOfColumns> tableView;
     private BasketOfList basketOfList;
 
-    public void setTest(BasketOfList table) {
+    public void setTable(BasketOfList table) {
         tableView.getItems().clear();
         this.basketOfList = table;
         reSize();
@@ -67,12 +49,9 @@ public class TableViewPresenter {
     }
 
     public void filter(String input) {
-        System.out.println(input);
         tableView.getItems().clear();
-        for (int i = 0; i < basketOfList.getOLCUNO().size(); i++) {
-            if (input.equals(basketOfList.getOLCUNO().get(i).replaceAll("'", "").trim())
-                    || input.equals(basketOfList.getOLORNO().get(i).replaceAll("'", "").trim())
-                    || input.equals(basketOfList.getOLPRDC().get(i).replaceAll("'", "").trim())) {
+        for (int i = 0; i < basketOfList.getArticles().size(); i++) {
+            if (input.equals(basketOfList.getArticles().get(i).replaceAll("'", "").trim())) {
                 BasketOfColumns basketOfColumns = getBasketOfColumns(basketOfList, i);
                 tableView.getItems().addAll(basketOfColumns);
             }
@@ -80,47 +59,34 @@ public class TableViewPresenter {
     }
 
     public void writeDataInTable() {
-        for (int i = 0; i < basketOfList.getOLORDS().size(); i++) {
+        tableView.getItems().clear();
+        for (int i = 0; i < basketOfList.getArticles().size(); i++) {
             BasketOfColumns basketOfColumns = getBasketOfColumns(basketOfList, i);
             tableView.getItems().addAll(basketOfColumns);
         }
     }
 
     private BasketOfColumns getBasketOfColumns(BasketOfList basketOfList, int i) {
-        BasketOfColumns basketOfColumns = new BasketOfColumns(basketOfList.getOLORDT().get(i),
-                basketOfList.getOLORDS().get(i),
-                basketOfList.getOLCUNO().get(i),
-                basketOfList.getOLORNO().get(i),
-                basketOfList.getOLPRDC().get(i),
-                basketOfList.getOLDESC().get(i),
-                basketOfList.getOLOQTY().get(i));
-        basketOfColumns.setBasketOfColumns(basketOfList.getOLSALP().get(i),
-                basketOfList.getOLSCPR().get(i), basketOfList.getOLCOSP().get(i), basketOfList.getOLITET().get(i),
-                basketOfList.getOLFOCC().get(i), basketOfList.getNACOUN().get(i));
-        basketOfColumns.setBasketOfColumns(basketOfList.getNANAME().get(i), basketOfList.getOHEXR3().get(i),
-                basketOfList.getOHPCUR().get(i), basketOfList.getOHODAT().get(i), basketOfList.getPGPGRP().get(i));
+        System.out.println(basketOfList.getCountries().size());
+        BasketOfColumns basketOfColumns = new BasketOfColumns(basketOfList.getCountries().get(i), basketOfList.getClients().get(i),
+                basketOfList.getDate().get(i), basketOfList.getIds().get(i));
+        int qty_action = (int) Double.parseDouble(basketOfList.getQty_action().get(i));
+        int qty_comparison = (int) Double.parseDouble(basketOfList.getQty_comparison().get(i));
+        basketOfColumns.setBasketOfColumns(basketOfList.getArticles().get(i), basketOfList.getSales_volume_action().get(i),
+                ""+qty_action, basketOfList.getSales_volume_comparison().get(i), "" + qty_comparison);
         return basketOfColumns;
     }
 
     private void initTableColumn() {
-        olordt.setCellValueFactory(new PropertyValueFactory<>("OLORDT"));
-        olords.setCellValueFactory(new PropertyValueFactory<>("OLORDS"));
-        olcuno.setCellValueFactory(new PropertyValueFactory<>("OLCUNO"));
-        olorno.setCellValueFactory(new PropertyValueFactory<>("OLORNO"));
-        olprdc.setCellValueFactory(new PropertyValueFactory<>("OLPRDC"));
-        oldesc.setCellValueFactory(new PropertyValueFactory<>("OLDESC"));
-        oloqty.setCellValueFactory(new PropertyValueFactory<>("OLOQTY"));
-        olsalp.setCellValueFactory(new PropertyValueFactory<>("OLSALP"));
-        olscpr.setCellValueFactory(new PropertyValueFactory<>("OLSCPR"));
-        olcosp.setCellValueFactory(new PropertyValueFactory<>("OLCOSP"));
-        olitet.setCellValueFactory(new PropertyValueFactory<>("OLITET"));
-        olfocc.setCellValueFactory(new PropertyValueFactory<>("OLFOCC"));
-        nacoun.setCellValueFactory(new PropertyValueFactory<>("NACOUN"));
-        naname.setCellValueFactory(new PropertyValueFactory<>("NANAME"));
-        ohexr3.setCellValueFactory(new PropertyValueFactory<>("OHEXR3"));
-        ohpcur.setCellValueFactory(new PropertyValueFactory<>("OHPCUR"));
-        ohodat.setCellValueFactory(new PropertyValueFactory<>("OHODAT"));
-        pgpgrp.setCellValueFactory(new PropertyValueFactory<>("PGPGRP"));
+        olordt.setCellValueFactory(new PropertyValueFactory<>("Land"));
+        olords.setCellValueFactory(new PropertyValueFactory<>("Mandant"));
+        olcuno.setCellValueFactory(new PropertyValueFactory<>("Datum"));
+        oldesc.setCellValueFactory(new PropertyValueFactory<>("Newsletter_ID"));
+        oloqty.setCellValueFactory(new PropertyValueFactory<>("Artikelnummer"));
+        olsalp.setCellValueFactory(new PropertyValueFactory<>("QTY_Aktion"));
+        olscpr.setCellValueFactory(new PropertyValueFactory<>("SalesVolume_Aktion"));
+        olitet.setCellValueFactory(new PropertyValueFactory<>("QTY_Comparison"));
+        olcosp.setCellValueFactory(new PropertyValueFactory<>("SalesVolume_Comparison"));
     }
 
     private void reSize() {

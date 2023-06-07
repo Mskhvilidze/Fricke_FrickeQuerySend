@@ -13,6 +13,7 @@ import fricke.model.DataBaseUserStore;
 import fricke.service.Service;
 import fricke.util.DocsQuickstart;
 import fricke.util.WorkBookClass;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -28,6 +29,12 @@ import java.util.*;
 @SuppressWarnings("UnstableApiUsage")
 public class TabPresenter implements Initializable {
     public static final String FXML = "/fxml/tab.fxml";
+    @FXML
+    private TextField newsletter;
+    @FXML
+    private TextField comparisonFrom;
+    @FXML
+    private TextField comparisonTo;
     @FXML
     private MenuButton menuButton;
     @FXML
@@ -69,31 +76,61 @@ public class TabPresenter implements Initializable {
                 menuItems.setText(String.join(",", countryItems));
             });
         }
+        setDateFormatter(comparisonFrom);
+        setDateFormatter(comparisonTo);
         setDateFormatter(from);
         setDateFormatter(to);
+    }
+
+    private boolean required(TextField from, TextField to, List<String> countryItems) {
+        //Wenn anfangszeit größer ist als endzeit
+        if (Integer.parseInt(from.getText()) > Integer.parseInt(to.getText())) {
+            Service.alert("Bitte überprüfen eingegebenes Datum! \n" + from.getText() +
+                    " darf nicht größer sein als " + to.getText(), "Datum");
+            return false;
+        }
+
+        //NewsletterID darf nicht leer sein
+        BooleanBinding binding = newsletter.textProperty().isEmpty();
+        if (binding.get()){
+            Service.alert("Newsletter_ID: Id muss eingegeben werden!", "Newsletter_ID");
+            return false;
+        }
+
+        //Wenn der Benutzer vergessen, die Länder auszuwählen
+        if (countryItems.isEmpty()) {
+            Service.alert("MenuButton: Länder wurden nicht ausgewählt", "Länder");
+            return false;
+        }
+
+        return true;
     }
 
     @FXML
     private void onExecuteQuery() {
         inf.clear();
         progressBarReset();
-        if (Integer.parseInt(from.getText()) > Integer.parseInt(to.getText())) {
-            Service.alert("Bitte überprüfen eingegebenes Datum! \n" + from.getText() +
-                    " darf nicht größer sein als " + to.getText(), "Datum");
-            return;
-        }
-        if (countryItems.isEmpty()) {
-            Service.alert("MenuButton: Länder wurden nicht ausgewählt", "Länder");
+        boolean isValid = required(from, to, countryItems);
+        if (!isValid){
             return;
         }
         DataBaseUserStore store = new DataBaseUserStore();
         List<String> list = Arrays.asList(articles.getText().split(","));
-        store.createFile(from.getText().trim(), to.getText().trim(), countryItems, list, progressBar, tabPane.getSelectionModel().getSelectedItem().getText());
-        if (isYearValid(from.getText()) && isYearValid(to.getText())) {
+        List<String> comparisonDate = new ArrayList<>();
+        comparisonDate.add(comparisonFrom.getText());
+        comparisonDate.add(comparisonTo.getText());
+        comparisonDate.add(newsletter.getText());
+        store.createFile(from.getText().trim(), to.getText().trim(), countryItems, list, progressBar,
+                tabPane.getSelectionModel().getSelectedItem().getText(), comparisonDate);
+        if (isYearValid(from.getText()) && isYearValid(to.getText()) && isYearValid(comparisonFrom.getText()) &&
+                isYearValid(comparisonTo.getText())) {
             inf.add(from.getText());
             inf.add(to.getText());
             inf.add(String.join(",", countryItems));
             inf.add(articles.getText());
+            inf.add(comparisonFrom.getText());
+            inf.add(comparisonTo.getText());
+            inf.add(newsletter.getText());
             for (Tab tab : tabs) {
                 if (tab.getUserData() == tabPane.getSelectionModel().getSelectedItem().getUserData()) {
                     if (Service.getMap().containsKey(tab.getUserData())) {

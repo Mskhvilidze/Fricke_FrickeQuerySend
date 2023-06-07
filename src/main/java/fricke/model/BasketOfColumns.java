@@ -5,51 +5,28 @@ import lombok.Getter;
 @Getter
 public class BasketOfColumns {
 
-    private String OLORDT;
-    private String OLORDS;
-    private String OLCUNO;
-    private String OLORNO;
-    private String OLPRDC;
-    private String OLDESC;
-    private String OLOQTY;
+    private String Land;
+    private String Mandant;
+    private String Datum;
+    private String Newsletter_ID;
+    private String Artikelnummer;
+    private String QTY_Aktion;
+    private String SalesVolume_Aktion;
+    private String QTY_Comparison;
+    private String SalesVolume_Comparison;
 
-    private String OLSALP;
-    private String OLSCPR;
-    private String OLITET;
-    private String OLCOSP;
-    private String OLFOCC;
-    private String NACOUN;
-
-    private String NANAME;
-    private String OHEXR3;
-    private String OHPCUR;
-    private String OHODAT;
-    private String PGPGRP;
-
-    public BasketOfColumns(String OLORDT, String OLORDS, String OLCUNO, String OLORNO, String OLPRDC, String OLDESC, String OLOQTY) {
-        this.OLORDT = OLORDT;
-        this.OLORDS = OLORDS;
-        this.OLCUNO = OLCUNO;
-        this.OLORNO = OLORNO;
-        this.OLPRDC = OLPRDC;
-        this.OLDESC = OLDESC;
-        this.OLOQTY = OLOQTY;
+    public BasketOfColumns(String Land, String Mandant, String Datum, String Newsletter_ID) {
+        this.Land = Land;
+        this.Mandant = Mandant;
+        this.Datum = Datum;
+        this.Newsletter_ID = Newsletter_ID;
     }
 
-    public void setBasketOfColumns(String OLSALP, String OLSCPR, String OLITET, String OLCOSP, String OLFOCC, String NACOUN) {
-        this.OLSALP = OLSALP;
-        this.OLSCPR = OLSCPR;
-        this.OLITET = OLITET;
-        this.OLCOSP = OLCOSP;
-        this.OLFOCC = OLFOCC;
-        this.NACOUN = NACOUN;
-    }
-
-    public void setBasketOfColumns(String NANAME, String OHEXR3, String OHPCUR, String OHODAT, String PGPGRP) {
-        this.NANAME = NANAME;
-        this.OHEXR3 = OHEXR3;
-        this.OHPCUR = OHPCUR;
-        this.OHODAT = OHODAT;
-        this.PGPGRP = PGPGRP;
+    public void setBasketOfColumns(String Artikelnummer, String QTY_Aktion, String SalesVolume_Aktion, String QTY_Comparison, String SalesVolume_Comparison) {
+        this.Artikelnummer = Artikelnummer;
+        this.QTY_Aktion = QTY_Aktion;
+        this.SalesVolume_Aktion = SalesVolume_Aktion;
+        this.QTY_Comparison = QTY_Comparison;
+        this.SalesVolume_Comparison = SalesVolume_Comparison;
     }
 }
