@@ -67,7 +67,6 @@ public class TableViewPresenter {
     }
 
     private BasketOfColumns getBasketOfColumns(BasketOfList basketOfList, int i) {
-        System.out.println(basketOfList.getCountries().size());
         BasketOfColumns basketOfColumns = new BasketOfColumns(basketOfList.getCountries().get(i), basketOfList.getClients().get(i),
                 basketOfList.getDate().get(i), basketOfList.getIds().get(i));
         int qty_action = (int) Double.parseDouble(basketOfList.getQty_action().get(i));

@@ -8,6 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.io.File;
 import java.util.*;
 
 public class Service {
@@ -63,5 +64,12 @@ public class Service {
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         return "" + year + "" + month + "" + day;
+    }
+
+    public static void deleteAllFiles() {
+        File file = new File("files");
+        if (file.listFiles().length > 0) {
+            Arrays.stream(file.listFiles()).forEach(deletedFile -> deletedFile.delete());
+        }
     }
 }

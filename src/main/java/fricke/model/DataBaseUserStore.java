@@ -15,8 +15,7 @@ import java.util.StringJoiner;
 
 public class DataBaseUserStore {
     private final DataBaseConnection connection;
-    private Client client = new Client();
-
+    private final Client client = new Client();
     public DataBaseUserStore() {
         connection = new DataBaseConnection();
     }
@@ -57,8 +56,8 @@ public class DataBaseUserStore {
                 basketOfList.add(result.getString("OLPRDC"), result.getString("Umsatz Aktion"),
                         result.getString("Menge Aktion"), result.getString("Umsatz Vergleich"),
                         result.getString("Menge Vergleich"));
-                String client = this.client.getClient(result.getString("NACOUN").toUpperCase(Locale.ROOT).trim());
-                basketOfList.add(result.getString("NACOUN"), client, to, client + "_" + to + "_" +
+                String nacoun = this.client.getClient(result.getString("NACOUN").toUpperCase(Locale.ROOT).trim());
+                basketOfList.add(result.getString("NACOUN"), nacoun, to, nacoun + "_" + to + "_" +
                         comparisonDate.get(2));
                 Task<Void> task = getTask(counterpoint, count);
                 progressBar.progressProperty().unbind();
@@ -89,8 +88,8 @@ public class DataBaseUserStore {
                 basketOfList.add(result.getString("NACOUN"), client, to, client + "_" + to + "_" +
                         comparisonDate.get(2));
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
         return basketOfList;
     }

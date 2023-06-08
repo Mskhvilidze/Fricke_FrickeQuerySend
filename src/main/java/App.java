@@ -11,11 +11,11 @@ public class App extends Application {
         new ScannerManager(stage);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         FilePath.removeAllFile();
         File dir = new File(System.getProperty("/"),
                 ".credentials/drive-java-quickstart");
-        if (!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
         if (dir.listFiles().length > 0) {

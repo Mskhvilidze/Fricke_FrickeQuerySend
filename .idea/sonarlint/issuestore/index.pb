@@ -2,8 +2,6 @@
 R
 "src/main/java/META-INF/MANIFEST.MF,6\3\63ef5783cbf71fdf39c1fd6ae6873fd812259930
 W
-'.idea/artifacts/FrickeQuerySend_jar.xml,c\9\c9f98f291cfbed86486796883035e720a19c634e
-W
 'src/main/java/fricke/model/Country.java,b\b\bb8128d9ca94073197f5c81d4126b9d29ba430ad
 b
 2src/main/java/fricke/model/DataBaseConnection.java,9\4\946241346b19890897064072f8f42b75737dd0d8
@@ -17,11 +15,9 @@ W
 0src/main/java/fricke/message/RequestTabPane.java,e\2\e2e24cf91716909d35e2a1e3894065eb02428e55
 X
 (src/main/java/fricke/ScannerManager.java,b\a\ba239e873ebffdfbc27bcca95cf0bc67804424fe
-Y
-)src/main/java/fricke/service/Service.java,e\4\e407900f72fb2fbcc5caa3a08a6ca640f80d1017
-]
--src/main/java/fricke/util/DocsQuickstart.java,a\a\aad2f4fbda8a6c9e2e27cdc7db871e474a51c29b
-G
-src/main/java/Test.java,b\6\b660a5f333c00ef78dec1d85c727eb000157c1f3
-F
-src/main/java/App.java,6\7\67512e2f04487cca15d6699055f74a51de1a9eb4
+_
+/src/main/java/fricke/model/BasketOfColumns.java,6\d\6d8f80ad5b0aa048b7aa7edeac6dbd048f14a15c
+\
+,src/main/java/fricke/model/BasketOfList.java,6\f\6fb6773e8500a53e80d3bcd067f4bb3983ec58aa
+\
+,src/main/java/fricke/util/WorkBookClass.java,8\3\83f5aaee56319289b658790aab956758b854a651

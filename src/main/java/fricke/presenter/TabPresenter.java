@@ -13,14 +13,13 @@ import fricke.model.DataBaseUserStore;
 import fricke.service.Service;
 import fricke.util.DocsQuickstart;
 import fricke.util.WorkBookClass;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +28,8 @@ import java.util.*;
 @SuppressWarnings("UnstableApiUsage")
 public class TabPresenter implements Initializable {
     public static final String FXML = "/fxml/tab.fxml";
+    @FXML
+    private Button fileSend;
     @FXML
     private TextField newsletter;
     @FXML
@@ -48,21 +49,19 @@ public class TabPresenter implements Initializable {
     @FXML
     private TextField to;
     @FXML
-    private ComboBox<String> country;
-    @FXML
     private TextField articles;
     private TabPane tabPane;
     private final List<String> inf = new ArrayList<>();
     private final List<Tab> tabs = new ArrayList<>();
     private final List<String> countryItems = new ArrayList<>();
     private String error = "Bitte überprüfen die eingegebenen Daten!";
+    private List<TextField> textFields;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         new Service();
         EventBus bus = Service.getBus();
         bus.register(this);
-        this.country.getItems().addAll(FXCollections.observableArrayList(Country.getInstance().getCountries()));
         List<CheckMenuItem> list = getItems();
         menuButton.getItems().addAll(list);
         for (CheckMenuItem checkMenuItem : list) {
@@ -80,38 +79,21 @@ public class TabPresenter implements Initializable {
         setDateFormatter(comparisonTo);
         setDateFormatter(from);
         setDateFormatter(to);
-    }
-
-    private boolean required(TextField from, TextField to, List<String> countryItems) {
-        //Wenn anfangszeit größer ist als endzeit
-        if (Integer.parseInt(from.getText()) > Integer.parseInt(to.getText())) {
-            Service.alert("Bitte überprüfen eingegebenes Datum! \n" + from.getText() +
-                    " darf nicht größer sein als " + to.getText(), "Datum");
-            return false;
-        }
-
-        //NewsletterID darf nicht leer sein
-        BooleanBinding binding = newsletter.textProperty().isEmpty();
-        if (binding.get()){
-            Service.alert("Newsletter_ID: Id muss eingegeben werden!", "Newsletter_ID");
-            return false;
-        }
-
-        //Wenn der Benutzer vergessen, die Länder auszuwählen
-        if (countryItems.isEmpty()) {
-            Service.alert("MenuButton: Länder wurden nicht ausgewählt", "Länder");
-            return false;
-        }
-
-        return true;
+        textFields = Arrays.asList(from, to, comparisonFrom, comparisonTo);
+        clearValidatorLabel();
     }
 
     @FXML
     private void onExecuteQuery() {
         inf.clear();
         progressBarReset();
+        Service.deleteAllFiles();
+        boolean isCheckField = checkFields();
+        if (!isCheckField) {
+            return;
+        }
         boolean isValid = required(from, to, countryItems);
-        if (!isValid){
+        if (!isValid) {
             return;
         }
         DataBaseUserStore store = new DataBaseUserStore();
@@ -140,6 +122,7 @@ public class TabPresenter implements Initializable {
                 }
             }
             validator.setText("");
+            fileSend.setDisable(false);
         } else {
             validator.setText(error);
         }
@@ -160,18 +143,22 @@ public class TabPresenter implements Initializable {
                 FileOutputStream fileOut = new FileOutputStream(tempFile);
                 service.files().get(excelFile.getId())
                         .executeMediaAndDownloadTo(fileOut);
-                if (!tempFile.exists() || !new java.io.File("files/" + tabPane.getSelectionModel().getSelectedItem().getText() + ".xlsx").exists()) {
+                if (!tempFile.exists() || !new java.io.File("files/" + tabPane.getSelectionModel()
+                        .getSelectedItem().getText() + ".xlsx").exists()) {
                     Service.alert("Datei wurde nicht erstellt!", "");
                     return;
                 }
-                boolean isReadXSLSFile = workBookClass.readXLSXFile(tempFile, tabPane.getSelectionModel().getSelectedItem().getText());
+                boolean isReadXSLSFile = workBookClass.readXLSXFile(tempFile, tabPane.getSelectionModel()
+                        .getSelectedItem().getText());
                 if (isReadXSLSFile) {
                     service.files().delete(excelFile.getId()).execute();
+                    fileSend.setDisable(true);
                     send(service, "mergedFile");
                 }
             }
         }
         if (!isExist) {
+            fileSend.setDisable(true);
             send(service, tabPane.getSelectionModel().getSelectedItem().getText());
         }
     }
@@ -238,6 +225,57 @@ public class TabPresenter implements Initializable {
             items.add(new CheckMenuItem(Country.getInstance().getCountries()[i]));
         }
         return items;
+    }
+
+    private boolean required(TextField from, TextField to, List<String> countryItems) {
+        //Wenn anfangszeit größer ist als endzeit
+        if (Integer.parseInt(from.getText()) > Integer.parseInt(to.getText())) {
+            Service.alert("Bitte überprüfen eingegebenes Datum! \n" + from.getText() +
+                    " darf nicht größer sein als " + to.getText(), "Datum");
+            return false;
+        }
+
+        //NewsletterID darf nicht leer sein
+        BooleanBinding binding = newsletter.textProperty().isEmpty();
+        if (binding.get()) {
+            Service.alert("Newsletter_ID: Id muss eingegeben werden!", "Newsletter_ID");
+            return false;
+        }
+
+        //Wenn der Benutzer vergessen, die Länder auszuwählen
+        if (countryItems.isEmpty()) {
+            Service.alert("MenuButton: Länder wurden nicht ausgewählt", "Länder");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkFields() {
+        for (TextField textField : textFields) {
+            BooleanBinding binding = textField.textProperty().isEmpty();
+            if (binding.get()) {
+                error += "\n" + "Felder müssen gefüllt werden";
+                validator.setText(error);
+                validator.setTextFill(Color.web("red"));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void clearValidatorLabel() {
+        for (TextField textField : textFields) {
+            textField.focusedProperty().addListener(observable -> {
+                Timer t = new Timer();
+                t.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> validator.setText(""));
+                    }
+                }, 4000);
+            });
+        }
     }
 
     @Subscribe

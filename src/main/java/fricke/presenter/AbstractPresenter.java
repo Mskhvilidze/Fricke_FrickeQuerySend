@@ -81,7 +81,7 @@ public class AbstractPresenter implements Initializable {
 
     @FXML
     private void onClearDirectory() {
-        System.out.println(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(3));
+
     }
 
     @FXML
