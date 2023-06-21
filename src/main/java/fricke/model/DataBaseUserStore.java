@@ -2,6 +2,7 @@ package fricke.model;
 
 import fricke.service.Service;
 import fricke.util.Client;
+import fricke.util.SQLColumns;
 import fricke.util.WorkBookClass;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressIndicator;
@@ -16,12 +17,14 @@ import java.util.StringJoiner;
 public class DataBaseUserStore {
     private final DataBaseConnection connection;
     private final Client client = new Client();
+
     public DataBaseUserStore() {
         connection = new DataBaseConnection();
     }
 
     // Resultset wird erstellt und PreparedStatement wird zurückgegeben
-    public ResultSet executeQuery(String from, String to, List<String> country, List<String> articles, List<String> comparisonDate) {
+    public ResultSet executeQuery(String from, String to, List<String> country, List<String> articles,
+                                  List<String> comparisonDate) {
         StringJoiner joiner = getJoiner(articles);
         StringJoiner countries = getJoiner(country);
         String query = getQuery(joiner, countries);
@@ -41,24 +44,30 @@ public class DataBaseUserStore {
     }
 
     //Progressbar einrichten und Datei erstellen
-    public void createFile(String from, String to, List<String> country, List<String> articles, ProgressIndicator progressBar, String filename, List<String> comparisonDate) {
+    public void createFile(String from, String to, List<String> country, List<String> articles,
+                           ProgressIndicator progressBar, String filename, List<String> basketForDateAndTabPane) {
         WorkBookClass bookClass = new WorkBookClass();
         bookClass.createXLSXFile(filename);
         BasketOfList basketOfList = new BasketOfList();
-        int count = getRow(from, to, country, articles, comparisonDate);
+        int count = getRow(from, to, country, articles, basketForDateAndTabPane);
         int counterpoint = 0;
         int row = 0;
-        ResultSet result = executeQuery(from, to, country, articles, comparisonDate);
+        ResultSet result = executeQuery(from, to, country, articles, basketForDateAndTabPane);
         try {
             while (result.next()) {
                 counterpoint++;
                 row = result.getRow();
-                basketOfList.add(result.getString("OLPRDC"), result.getString("Umsatz Aktion"),
-                        result.getString("Menge Aktion"), result.getString("Umsatz Vergleich"),
-                        result.getString("Menge Vergleich"));
-                String nacoun = this.client.getClient(result.getString("NACOUN").toUpperCase(Locale.ROOT).trim());
-                basketOfList.add(result.getString("NACOUN"), nacoun, to, nacoun + "_" + to + "_" +
-                        comparisonDate.get(2));
+                String newsletter = Service.getBasketForNewsletter().get(basketForDateAndTabPane.get(2))
+                        .get(result.getString(SQLColumns.COUNTRY.value()).trim());
+                basketOfList.add(result.getString(SQLColumns.ARTICLE.value()),
+                        formatSales(result.getString(SQLColumns.SALES_ACTION.value())),
+                        formatQty(result.getString(SQLColumns.AMOUNT_ACTION.value())),
+                        formatSales(result.getString(SQLColumns.SALES_COMPARISON.value())),
+                        formatQty(result.getString(SQLColumns.AMOUNT_COMPARISON.value())));
+                String nacoun = this.client.getClient(result.getString(SQLColumns.COUNTRY.value())
+                        .toUpperCase(Locale.ROOT).trim());
+                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), nacoun, to, nacoun + "_" + to + "_" +
+                        newsletter);
                 Task<Void> task = getTask(counterpoint, count);
                 progressBar.progressProperty().unbind();
                 progressBar.progressProperty().bind(task.progressProperty());
@@ -76,17 +85,23 @@ public class DataBaseUserStore {
     }
 
     //Tabelle im Gui füllen
-    public BasketOfList fillTableView(String from, String to, List<String> country, List<String> articles, List<String> comparisonDate) {
-        ResultSet result = executeQuery(from, to, country, articles, comparisonDate);
+    public BasketOfList fillTableView(String from, String to, List<String> country, List<String> articles,
+                                      List<String> basketForDateAndTabPane) {
+        ResultSet result = executeQuery(from, to, country, articles, basketForDateAndTabPane);
         BasketOfList basketOfList = new BasketOfList();
         try {
             while (result.next()) {
-                basketOfList.add(result.getString("OLPRDC"), result.getString("Umsatz Aktion"),
-                        result.getString("Menge Aktion"), result.getString("Umsatz Vergleich"),
-                        result.getString("Menge Vergleich"));
-                String client = this.client.getClient(result.getString("NACOUN").toUpperCase(Locale.ROOT).trim());
-                basketOfList.add(result.getString("NACOUN"), client, to, client + "_" + to + "_" +
-                        comparisonDate.get(2));
+                String newsletter = Service.getBasketForNewsletter().get(basketForDateAndTabPane.get(2))
+                        .get(result.getString(SQLColumns.COUNTRY.value()).trim());
+                basketOfList.add(result.getString(SQLColumns.ARTICLE.value()),
+                        formatSales(result.getString(SQLColumns.SALES_ACTION.value())),
+                        formatQty(result.getString(SQLColumns.AMOUNT_ACTION.value())),
+                        formatSales(result.getString(SQLColumns.SALES_COMPARISON.value())),
+                        formatQty(result.getString(SQLColumns.AMOUNT_COMPARISON.value())));
+                String client = this.client.getClient(
+                        result.getString(SQLColumns.COUNTRY.value()).toUpperCase(Locale.ROOT).trim());
+                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), client, to, client + "_" + to + "_" +
+                        newsletter);
             }
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -95,7 +110,8 @@ public class DataBaseUserStore {
     }
 
     //
-    private int getRow(String from, String to, List<String> country, List<String> articles, List<String> comparisonDate) {
+    private int getRow(String from, String to, List<String> country, List<String> articles,
+                       List<String> comparisonDate) {
         int count = 0;
         int index = 0;
         StringJoiner joiner = getJoiner(articles);
@@ -202,7 +218,8 @@ public class DataBaseUserStore {
         return thread;
     }
 
-    private int setStatementDate(PreparedStatement statement, String from, String to, List<String> comparisonDate, int index) throws SQLException {
+    private int setStatementDate(PreparedStatement statement, String from, String to, List<String> comparisonDate,
+                                 int index) throws SQLException {
         //Aktionszeitraum
         statement.setString(index = index + 1, from);
         statement.setString(index = index + 1, to);
@@ -216,7 +233,8 @@ public class DataBaseUserStore {
         return index;
     }
 
-    private int setStatementQueryDate(PreparedStatement statement, String from, String to, List<String> comparisonDate, int index) throws SQLException {
+    private int setStatementQueryDate(PreparedStatement statement, String from, String to, List<String> comparisonDate,
+                                      int index) throws SQLException {
         //Where Aktionszeitraum
         statement.setString(index = index + 1, from);
         statement.setString(index = index + 1, to);
@@ -228,7 +246,8 @@ public class DataBaseUserStore {
         return index;
     }
 
-    private int setStatementCountryAndArticle(PreparedStatement statement, List<String> country, List<String> articles, int index) throws SQLException {
+    private int setStatementCountryAndArticle(PreparedStatement statement, List<String> country, List<String> articles,
+                                              int index) throws SQLException {
         //Country
         for (String count : country) {
             statement.setNString(index, count.replaceAll("'", "").trim());
@@ -240,5 +259,21 @@ public class DataBaseUserStore {
             index++;
         }
         return index;
+    }
+
+    private String formatQty(String qty) {
+        if (qty.isEmpty()) {
+            qty = "0";
+        }
+        Double formatted = Double.parseDouble(qty);
+        return String.valueOf(formatted.intValue());
+    }
+
+    private String formatSales(String sales) {
+        if (sales.isEmpty()) {
+            sales = "0";
+        }
+        Double formatted = Double.parseDouble(sales);
+        return String.valueOf(formatted).replace(".", ",");
     }
 }

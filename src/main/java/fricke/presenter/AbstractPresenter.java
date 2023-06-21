@@ -72,7 +72,8 @@ public class AbstractPresenter implements Initializable {
         newTab.setContent(manager.showTabs());
         tabPane.getTabs().add(newTab);
         Service.onRequestTab(newTab);
-        tabPane.getSelectionModel().getSelectedItem().setOnSelectionChanged((event -> Service.onRequestTabPane(tabPane)));
+        tabPane.getSelectionModel().getSelectedItem()
+                .setOnSelectionChanged((event -> Service.onRequestTabPane(tabPane)));
     }
 
     public void viewHomeImage() {
@@ -86,23 +87,25 @@ public class AbstractPresenter implements Initializable {
 
     @FXML
     private void onOpenTableView() {
-        List<String> comparisonDate = new ArrayList<>();
+        List<String> basketForDateAndTabPane = new ArrayList<>();
         if (Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()) == null) {
             Service.alert("Daten wurde nicht geladen", "Empty");
             return;
         }
-        toggleNodeVisible(pane,tableView , false, true);
+        toggleNodeVisible(pane, tableView, false, true);
         String from = Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(0);
         String to = Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(1);
         List<String> country = Arrays.asList(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem()
                 .getUserData()).get(2).split(","));
         List<String> articles = Arrays.asList(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem()
                 .getUserData()).get(3).split(","));
-        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(4));
-        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(5));
-        //in dieser Array auf der Index 2 ist auch newsletter gespeichert
-        comparisonDate.add(Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(6));
-        BasketOfList table1 = store.fillTableView(from.trim(), to.trim(), country, articles, comparisonDate);
+        basketForDateAndTabPane.add(
+                Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(4));
+        basketForDateAndTabPane.add(
+                Service.getMap().get(this.tabPane.getSelectionModel().getSelectedItem().getUserData()).get(5));
+        //Hier wird auch tabpane gespeichert, damit NewsletterId aus Map geholt werden kann in DataBaseUserStore
+        basketForDateAndTabPane.add(String.valueOf(this.tabPane.getSelectionModel().getSelectedItem().getUserData()));
+        BasketOfList table1 = store.fillTableView(from.trim(), to.trim(), country, articles, basketForDateAndTabPane);
         tableViewController.setTable(table1);
         reSize(1700.0);
         toggleNodeVisible(search, input, reset, true);
@@ -110,7 +113,7 @@ public class AbstractPresenter implements Initializable {
 
     @FXML
     private void onCloseTableView() {
-        toggleNodeVisible(pane,tableView , true, false);
+        toggleNodeVisible(pane, tableView, true, false);
         toggleNodeDisable(reset, true);
         toggleNodeVisible(search, input, reset, false);
         reSize(720.0);

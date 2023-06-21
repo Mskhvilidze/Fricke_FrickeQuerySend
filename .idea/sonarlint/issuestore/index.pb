@@ -3,8 +3,6 @@ R
 "src/main/java/META-INF/MANIFEST.MF,6\3\63ef5783cbf71fdf39c1fd6ae6873fd812259930
 W
 'src/main/java/fricke/model/Country.java,b\b\bb8128d9ca94073197f5c81d4126b9d29ba430ad
-b
-2src/main/java/fricke/model/DataBaseConnection.java,9\4\946241346b19890897064072f8f42b75737dd0d8
 W
 'src/main/java/fricke/util/FilePath.java,2\6\265810a36a7a2eda20f8c56e65019a1d0c9d3331
 7
@@ -21,3 +19,9 @@ _
 ,src/main/java/fricke/model/BasketOfList.java,6\f\6fb6773e8500a53e80d3bcd067f4bb3983ec58aa
 \
 ,src/main/java/fricke/util/WorkBookClass.java,8\3\83f5aaee56319289b658790aab956758b854a651
+]
+-src/main/java/fricke/util/DocsQuickstart.java,a\a\aad2f4fbda8a6c9e2e27cdc7db871e474a51c29b
+W
+'.idea/artifacts/FrickeQuerySend_jar.xml,c\9\c9f98f291cfbed86486796883035e720a19c634e
+b
+2src/main/java/fricke/model/DataBaseConnection.java,9\4\946241346b19890897064072f8f42b75737dd0d8

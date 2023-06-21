@@ -19,7 +19,11 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -29,13 +33,17 @@ import java.util.*;
 public class TabPresenter implements Initializable {
     public static final String FXML = "/fxml/tab.fxml";
     @FXML
+    private AnchorPane paneForNewsletter;
+    @FXML
+    private ListView listView;
+    @FXML
     private Button fileSend;
     @FXML
     private TextField newsletter;
     @FXML
-    private TextField comparisonFrom;
+    private TextField comparisonPeriodFrom;
     @FXML
-    private TextField comparisonTo;
+    private TextField comparisonPeriodTo;
     @FXML
     private MenuButton menuButton;
     @FXML
@@ -45,80 +53,86 @@ public class TabPresenter implements Initializable {
     @FXML
     private ProgressIndicator progressBar;
     @FXML
-    private TextField from;
+    private TextField actionPeriodFrom;
     @FXML
-    private TextField to;
+    private TextField actionPeriodTo;
     @FXML
     private TextField articles;
     private TabPane tabPane;
-    private final List<String> inf = new ArrayList<>();
+    private final List<String> recordList = new ArrayList<>();
     private final List<Tab> tabs = new ArrayList<>();
     private final List<String> countryItems = new ArrayList<>();
     private String error = "Bitte überprüfen die eingegebenen Daten!";
     private List<TextField> textFields;
+    private Map<String, String> newsletterIdByCountryMap = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         new Service();
         EventBus bus = Service.getBus();
         bus.register(this);
+        listView.setEditable(true);
         List<CheckMenuItem> list = getItems();
         menuButton.getItems().addAll(list);
         for (CheckMenuItem checkMenuItem : list) {
-            checkMenuItem.setOnAction(event -> {
-                CheckMenuItem item = (CheckMenuItem) event.getSource();
-                if (item.isSelected()) {
-                    countryItems.add(item.getText());
-                } else {
-                    countryItems.remove(item.getText());
-                }
-                menuItems.setText(String.join(",", countryItems));
-            });
+            handleCheckMenuItemAction(checkMenuItem);
         }
-        setDateFormatter(comparisonFrom);
-        setDateFormatter(comparisonTo);
-        setDateFormatter(from);
-        setDateFormatter(to);
-        textFields = Arrays.asList(from, to, comparisonFrom, comparisonTo);
+        setDateFormatter(comparisonPeriodFrom);
+        setDateFormatter(comparisonPeriodTo);
+        setDateFormatter(actionPeriodFrom);
+        setDateFormatter(actionPeriodTo);
+        textFields = Arrays.asList(actionPeriodFrom, actionPeriodTo, comparisonPeriodFrom, comparisonPeriodTo);
         clearValidatorLabel();
     }
 
     @FXML
     private void onExecuteQuery() {
-        inf.clear();
+        recordList.clear();
         progressBarReset();
         Service.deleteAllFiles();
         boolean isCheckField = checkFields();
         if (!isCheckField) {
             return;
         }
-        boolean isValid = required(from, to, countryItems);
+        boolean isValid = required(actionPeriodFrom, actionPeriodTo, countryItems);
         if (!isValid) {
             return;
         }
+        for (Object item : listView.getItems()) {
+            String temp = item.toString();
+            String[] splitTemp = temp.split(":");
+            if (splitTemp.length < 2 || splitTemp[1].trim().isEmpty()) {
+                Service.alert(splitTemp[0].trim() + " fehlt Newsletter_ID", "Error");
+                return;
+            }
+            newsletterIdByCountryMap.put(splitTemp[0].trim(), splitTemp[1].trim());
+            Service.getBasketForNewsletter().put(tabPane.getSelectionModel().getSelectedItem().getUserData(),
+                    newsletterIdByCountryMap);
+        }
         DataBaseUserStore store = new DataBaseUserStore();
         List<String> list = Arrays.asList(articles.getText().split(","));
-        List<String> comparisonDate = new ArrayList<>();
-        comparisonDate.add(comparisonFrom.getText());
-        comparisonDate.add(comparisonTo.getText());
-        comparisonDate.add(newsletter.getText());
-        store.createFile(from.getText().trim(), to.getText().trim(), countryItems, list, progressBar,
-                tabPane.getSelectionModel().getSelectedItem().getText(), comparisonDate);
-        if (isYearValid(from.getText()) && isYearValid(to.getText()) && isYearValid(comparisonFrom.getText()) &&
-                isYearValid(comparisonTo.getText())) {
-            inf.add(from.getText());
-            inf.add(to.getText());
-            inf.add(String.join(",", countryItems));
-            inf.add(articles.getText());
-            inf.add(comparisonFrom.getText());
-            inf.add(comparisonTo.getText());
-            inf.add(newsletter.getText());
+        List<String> basketForDateAndTabPane = new ArrayList<>();
+        basketForDateAndTabPane.add(comparisonPeriodFrom.getText());
+        basketForDateAndTabPane.add(comparisonPeriodTo.getText());
+        //Hier wird auch tabpane gespeichert, damit NewsletterId aus Map geholt werden kann in DataBaseUserStore
+        basketForDateAndTabPane.add(String.valueOf(tabPane.getSelectionModel().getSelectedItem().getUserData()));
+        store.createFile(actionPeriodFrom.getText().trim(), actionPeriodTo.getText().trim(), countryItems, list, progressBar,
+                tabPane.getSelectionModel().getSelectedItem().getText(), basketForDateAndTabPane);
+        if (isYearValid(actionPeriodFrom.getText()) && isYearValid(actionPeriodTo.getText()) && isYearValid(comparisonPeriodFrom.getText()) &&
+                isYearValid(comparisonPeriodTo.getText())) {
+            recordList.add(actionPeriodFrom.getText());
+            recordList.add(actionPeriodTo.getText());
+            recordList.add(String.join(",", countryItems));
+            recordList.add(articles.getText());
+            recordList.add(comparisonPeriodFrom.getText());
+            recordList.add(comparisonPeriodTo.getText());
+            recordList.add(newsletter.getText());
             for (Tab tab : tabs) {
                 if (tab.getUserData() == tabPane.getSelectionModel().getSelectedItem().getUserData()) {
                     if (Service.getMap().containsKey(tab.getUserData())) {
                         Service.getMap().remove(tab.getUserData());
                     }
-                    Service.getMap().put(tab.getUserData(), inf);
+                    Service.getMap().put(tab.getUserData(), recordList);
                 }
             }
             validator.setText("");
@@ -161,6 +175,11 @@ public class TabPresenter implements Initializable {
             fileSend.setDisable(true);
             send(service, tabPane.getSelectionModel().getSelectedItem().getText());
         }
+    }
+
+    @FXML
+    private void onCloseWindow() {
+        this.paneForNewsletter.setVisible(false);
     }
 
     private void send(Drive service, String filename) throws IOException {
@@ -276,6 +295,55 @@ public class TabPresenter implements Initializable {
                 }, 4000);
             });
         }
+    }
+
+    public void handleCheckMenuItemAction(CheckMenuItem checkMenuItem) {
+        checkMenuItem.setOnAction(event -> {
+            this.paneForNewsletter.setVisible(true);
+            CheckMenuItem item = (CheckMenuItem) event.getSource();
+            if (item.isSelected()) {
+                countryItems.add(item.getText());
+                //Newsletter_ID Editierbar
+                listView.setCellFactory(TextFieldListCell.forListView(new StringConverter<Object>() {
+                    String temp = "";
+
+                    @Override
+                    public String toString(Object object) {
+                        temp = object.toString();
+                        return object.toString();
+                    }
+
+                    @Override
+                    public Object fromString(String string) {
+                        boolean isValid = string.contains(":");
+                        if (!isValid) {
+                            String prefix = temp.substring(0, temp.substring(0, 3).endsWith("-") ? 3 : 2);
+                            return prefix + " : " + string;
+                        } else {
+                            return string;
+                        }
+                    }
+                }));
+                listView.getItems().add(item.getText() + ":");
+            } else {
+                countryItems.remove(item.getText());
+                Iterator<String> iterator = listView.getItems().iterator();
+                while (iterator.hasNext()) {
+                    String temp = iterator.next();
+                    // Unterschied zwischen Mandanten, z.B FR und FR-
+                    if (temp.substring(0, 3).endsWith("-")) {
+                        if (item.getText().equals(temp.substring(0, 3))) {
+                            iterator.remove();
+                        }
+                    } else {
+                        if (item.getText().equals(temp.substring(0, 2))) {
+                            iterator.remove();
+                        }
+                    }
+                }
+            }
+            menuItems.setText(String.join(",", countryItems));
+        });
     }
 
     @Subscribe

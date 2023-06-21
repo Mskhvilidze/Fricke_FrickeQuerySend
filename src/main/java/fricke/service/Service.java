@@ -15,7 +15,7 @@ public class Service {
     private static int count = 0;
     private static EventBus bus;
     private static Map<Object, List<String>> map = new HashMap<>();
-
+    private static Map<Object, Map<String, String>> basketForNewsletter = new HashMap<>();
     public Service() {
         bus = new EventBus();
         bus.register(this);
@@ -48,6 +48,10 @@ public class Service {
 
     public static Map<Object, List<String>> getMap() {
         return map;
+    }
+
+    public static Map<Object, Map<String, String>> getBasketForNewsletter() {
+        return basketForNewsletter;
     }
 
     public static void alert(String message, String title) {
