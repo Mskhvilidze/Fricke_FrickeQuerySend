@@ -116,9 +116,11 @@ public class TabPresenter implements Initializable {
         basketForDateAndTabPane.add(comparisonPeriodTo.getText());
         //Hier wird auch tabpane gespeichert, damit NewsletterId aus Map geholt werden kann in DataBaseUserStore
         basketForDateAndTabPane.add(String.valueOf(tabPane.getSelectionModel().getSelectedItem().getUserData()));
-        store.createFile(actionPeriodFrom.getText().trim(), actionPeriodTo.getText().trim(), countryItems, list, progressBar,
+        store.createFile(actionPeriodFrom.getText().trim(), actionPeriodTo.getText().trim(), countryItems, list,
+                progressBar,
                 tabPane.getSelectionModel().getSelectedItem().getText(), basketForDateAndTabPane);
-        if (isYearValid(actionPeriodFrom.getText()) && isYearValid(actionPeriodTo.getText()) && isYearValid(comparisonPeriodFrom.getText()) &&
+        if (isYearValid(actionPeriodFrom.getText()) && isYearValid(actionPeriodTo.getText()) &&
+                isYearValid(comparisonPeriodFrom.getText()) &&
                 isYearValid(comparisonPeriodTo.getText())) {
             recordList.add(actionPeriodFrom.getText());
             recordList.add(actionPeriodTo.getText());
@@ -148,7 +150,8 @@ public class TabPresenter implements Initializable {
         WorkBookClass workBookClass = new WorkBookClass();
         boolean isExist = false;
         List<File> excelFiles = service.files().list()
-                .setQ("mimeType='application/vnd.ms-excel'")
+                .setQ("mimeType='application/vnd.ms-excel' or " +
+                        "mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='text/csv'")
                 .execute().getFiles();
         for (File excelFile : excelFiles) {
             if (excelFile.getName().startsWith("SendFile")) {
@@ -162,12 +165,17 @@ public class TabPresenter implements Initializable {
                     Service.alert("Datei wurde nicht erstellt!", "");
                     return;
                 }
-                boolean isReadXSLSFile = workBookClass.readXLSXFile(tempFile, tabPane.getSelectionModel()
-                        .getSelectedItem().getText());
-                if (isReadXSLSFile) {
+                if (!workBookClass.checkFile(tempFile)){
+                    isExist = false;
                     service.files().delete(excelFile.getId()).execute();
-                    fileSend.setDisable(true);
-                    send(service, "mergedFile");
+                }else {
+                    boolean isReadXSLSFile = workBookClass.readXLSXFile(tempFile, tabPane.getSelectionModel()
+                            .getSelectedItem().getText());
+                    if (isReadXSLSFile) {
+                        service.files().delete(excelFile.getId()).execute();
+                        fileSend.setDisable(true);
+                        send(service, "mergedFile");
+                    }
                 }
             }
         }
@@ -292,7 +300,7 @@ public class TabPresenter implements Initializable {
                     public void run() {
                         Platform.runLater(() -> validator.setText(""));
                     }
-                }, 4000);
+                }, 15000);
             });
         }
     }

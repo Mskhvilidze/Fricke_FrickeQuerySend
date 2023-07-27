@@ -2,13 +2,12 @@ package fricke.util;
 
 import fricke.model.BasketOfList;
 import fricke.service.Service;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,6 +53,23 @@ public class WorkBookClass {
         }
     }
 
+    public boolean checkFile(File file) {
+        try (FileInputStream inputStream = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+            XSSFSheet sheet = (XSSFSheet) workbook.getSheetAt(0);
+            for (int i = 0; i < sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            Service.alert("Bitte überprüfen, ob die Datei von einem anderen Prozess verwendet wird!", "MergeSheets");
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public boolean readXLSXFile(File file, String filename) {
         try (FileInputStream inputStream = new FileInputStream(file);
              FileInputStream inputStream1 = new FileInputStream("files/" + filename + ".xlsx");
@@ -72,26 +88,51 @@ public class WorkBookClass {
         return false;
     }
 
-    private void mergeSheets(XSSFSheet mergedSheet, XSSFSheet sheetToBeMerged, XSSFSheet sheetToBeMerged1) {
-        for (int i = 0; i <= sheetToBeMerged.getLastRowNum(); i++) {
-            Row row = sheetToBeMerged.getRow(i);
-            Row mergedRow = mergedSheet.createRow(i);
-            for (int j = 0; j < row.getLastCellNum(); j++) {
-                Cell cell = row.getCell(j);
-                Cell mergedCell = mergedRow.createCell(j);
-                mergedCell.setCellValue(cell.getStringCellValue());
+    private boolean checkEmptyRow(Row row) {
+        boolean isValid = false;
+        for (int j = 0; j < row.getLastCellNum(); j++) {
+            Cell cell = row.getCell(j);
+            if (cell != null && cell.getCellType() != CellType.BLANK &&
+                    !getDataFormatter().formatCellValue(cell).isEmpty()) {
+                isValid = true;
             }
         }
+        return isValid;
+    }
+
+    private void mergeSheets(XSSFSheet mergedSheet, XSSFSheet sheetToBeMerged, XSSFSheet sheetToBeMerged1) {
+        int sheetToBeMergedRow = 0;
+        for (int i = 0; i <= sheetToBeMerged.getPhysicalNumberOfRows(); i++) {
+            Row row = sheetToBeMerged.getRow(i);
+            if (row != null) {
+                Row mergedRow = mergedSheet.createRow(i);
+                if (checkEmptyRow(row)) {
+                    for (int j = 0; j < row.getLastCellNum(); j++) {
+                        Cell cell = row.getCell(j);
+                        Cell mergedCell = mergedRow.createCell(j);
+                        mergedCell.setCellValue(getDataFormatter().formatCellValue(cell));
+                        if (j == 0) {
+                            sheetToBeMergedRow++;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(sheetToBeMergedRow + " : " + sheetToBeMerged.getLastRowNum() + " : " +
+                sheetToBeMerged1.getLastRowNum());
         int k = 0;
-        for (int i = mergedSheet.getLastRowNum() + 1; i <= sheetToBeMerged.getLastRowNum() + sheetToBeMerged1.getLastRowNum(); i++) {
+        for (int i = sheetToBeMergedRow + 1;
+             i <= sheetToBeMergedRow + sheetToBeMerged1.getLastRowNum(); i++) {
             k++;
             Row row = sheetToBeMerged1.getRow(k);
-            Row mergedRow = mergedSheet.createRow(i);
             if (row != null) {
+                Row mergedRow = mergedSheet.createRow(i);
                 for (int j = 0; j < row.getLastCellNum(); j++) {
                     Cell cell = row.getCell(j);
                     Cell mergedCell = mergedRow.createCell(j);
-                    mergedCell.setCellValue(cell.getStringCellValue());
+                    if (cell != null && cell.getCellType() != CellType.BLANK) {
+                        mergedCell.setCellValue(getDataFormatter().formatCellValue(cell));
+                    }
                 }
             }
         }
@@ -124,9 +165,15 @@ public class WorkBookClass {
         }
     }
 
+    public DataFormatter getDataFormatter() {
+        DataFormatter dataFormatter = new DataFormatter();
+        return dataFormatter;
+    }
+
     private void initList() {
-        this.list = Arrays.asList("Land", "Mandant", "Datum", "Newsletter_ID", "Artikelnummer", "Umsatz Aktionszeitraum",
-                "Menge Aktionszeitraum", "Umsatz Vergleichzeitraum", "Menge Vergleichzeitraum");
+        this.list =
+                Arrays.asList("Land", "Mandant", "Datum", "Newsletter_ID", "Artikelnummer", "Umsatz Aktionszeitraum",
+                        "Menge Aktionszeitraum", "Umsatz Vergleichzeitraum", "Menge Vergleichzeitraum");
     }
 
     private String getPathFile(String filename) {

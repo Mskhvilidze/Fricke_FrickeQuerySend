@@ -66,7 +66,7 @@ public class DataBaseUserStore {
                         formatQty(result.getString(SQLColumns.AMOUNT_COMPARISON.value())));
                 String nacoun = this.client.getClient(result.getString(SQLColumns.COUNTRY.value())
                         .toUpperCase(Locale.ROOT).trim());
-                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), nacoun, to, nacoun + "_" + to + "_" +
+                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), nacoun, to, nacoun + "-" +
                         newsletter);
                 Task<Void> task = getTask(counterpoint, count);
                 progressBar.progressProperty().unbind();
@@ -98,9 +98,9 @@ public class DataBaseUserStore {
                         formatQty(result.getString(SQLColumns.AMOUNT_ACTION.value())),
                         formatSales(result.getString(SQLColumns.SALES_COMPARISON.value())),
                         formatQty(result.getString(SQLColumns.AMOUNT_COMPARISON.value())));
-                String client = this.client.getClient(
+                String s = this.client.getClient(
                         result.getString(SQLColumns.COUNTRY.value()).toUpperCase(Locale.ROOT).trim());
-                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), client, to, client + "_" + to + "_" +
+                basketOfList.add(result.getString(SQLColumns.COUNTRY.value()), s, to, s + "-" +
                         newsletter);
             }
         } catch (SQLException throwable) {
@@ -218,32 +218,35 @@ public class DataBaseUserStore {
         return thread;
     }
 
-    private int setStatementDate(PreparedStatement statement, String from, String to, List<String> comparisonDate,
-                                 int index) throws SQLException {
-        //Aktionszeitraum
-        statement.setString(index = index + 1, from);
-        statement.setString(index = index + 1, to);
-        statement.setString(index = index + 1, from);
-        statement.setString(index = index + 1, to);
-        //Vergleichzeitraum
-        statement.setString(index = index + 1, comparisonDate.get(0).trim());
-        statement.setString(index = index + 1, comparisonDate.get(1).trim());
-        statement.setString(index = index + 1, comparisonDate.get(0).trim());
-        statement.setString(index = index + 1, comparisonDate.get(1).trim());
-        return index;
+    private int setStatementDate(PreparedStatement statement, String fromDate, String toDate, List<String> comparisonDate, int startIndex) throws SQLException {
+        // Aktionszeitraum
+        statement.setString(startIndex + 1, fromDate);
+        statement.setString(startIndex + 2, toDate);
+        statement.setString(startIndex + 3, fromDate);
+        statement.setString(startIndex + 4, toDate);
+
+        // Überprüfen der Größe der comparisonDate-Liste
+        if (comparisonDate.size() >= 2) {
+            // Vergleichszeitraum
+            statement.setString(startIndex + 5, comparisonDate.get(0).trim());
+            statement.setString(startIndex + 6, comparisonDate.get(1).trim());
+            statement.setString(startIndex + 7, comparisonDate.get(0).trim());
+            statement.setString(startIndex + 8, comparisonDate.get(1).trim());
+        }
+
+        return startIndex + 8;
     }
 
     private int setStatementQueryDate(PreparedStatement statement, String from, String to, List<String> comparisonDate,
                                       int index) throws SQLException {
         //Where Aktionszeitraum
-        statement.setString(index = index + 1, from);
-        statement.setString(index = index + 1, to);
+        statement.setString(index + 1, from);
+        statement.setString(index + 2, to);
 
         //Where Vergleichzeitraum
-        statement.setString(index = index + 1, comparisonDate.get(0).trim());
-        statement.setString(index = index + 1, comparisonDate.get(1).trim());
-        index = index + 1;
-        return index;
+        statement.setString(index + 3, comparisonDate.get(0).trim());
+        statement.setString(index + 4, comparisonDate.get(1).trim());
+        return index + 5;
     }
 
     private int setStatementCountryAndArticle(PreparedStatement statement, List<String> country, List<String> articles,
