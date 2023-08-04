@@ -121,7 +121,7 @@ public class WorkBookClass {
         System.out.println(sheetToBeMergedRow + " : " + sheetToBeMerged.getLastRowNum() + " : " +
                 sheetToBeMerged1.getLastRowNum());
         int k = 0;
-        for (int i = sheetToBeMergedRow + 1;
+        for (int i = sheetToBeMergedRow;
              i <= sheetToBeMergedRow + sheetToBeMerged1.getLastRowNum(); i++) {
             k++;
             Row row = sheetToBeMerged1.getRow(k);
