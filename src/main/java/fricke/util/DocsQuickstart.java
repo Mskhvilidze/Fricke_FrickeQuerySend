@@ -3,9 +3,11 @@ package fricke.util;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.GoogleUtils;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -13,14 +15,18 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import fricke.service.Service;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 public class DocsQuickstart {
 
@@ -79,6 +85,11 @@ public class DocsQuickstart {
 
     static {
         try {
+            /*Properties systemProperties = System.getProperties();
+            systemProperties.setProperty("http.proxyHost", "proxy.fricke.local");
+            systemProperties.setProperty("http.proxyPort", "3128");
+            systemProperties.setProperty("https.proxyHost", "proxy.fricke.local");
+            systemProperties.setProperty("https.proxyPort", "3128");*/
             netHttpTransport = GoogleNetHttpTransport.newTrustedTransport();
             dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
         } catch (GeneralSecurityException | IOException e) {
@@ -86,7 +97,17 @@ public class DocsQuickstart {
         }
     }
 
-    public static Drive getDriveService() throws IOException {
+    public static HttpTransport newTransport(String proxyUrl, String portStr) throws NumberFormatException, GeneralSecurityException, IOException {
+        if (!StringUtils.isEmpty(proxyUrl) && !StringUtils.isEmpty(portStr)) {
+            return new NetHttpTransport.Builder()
+                    .trustCertificates(GoogleUtils.getCertificateTrustStore())
+                    .setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUrl, Integer.parseInt(portStr))))
+                    .build();
+        }
+        return GoogleNetHttpTransport.newTrustedTransport();
+    }
+
+    public static Drive getDriveService() throws IOException, GeneralSecurityException {
         Credential credential = getCredentials(netHttpTransport);
         return new Drive.Builder(netHttpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)

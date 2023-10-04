@@ -27,6 +27,7 @@ import javafx.util.StringConverter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -145,7 +146,7 @@ public class TabPresenter implements Initializable {
     }
 
     @FXML
-    private void onSendFile() throws IOException {
+    private void onSendFile() throws IOException, GeneralSecurityException {
         Drive service = DocsQuickstart.getDriveService();
         WorkBookClass workBookClass = new WorkBookClass();
         boolean isExist = false;
