@@ -1,0 +1,9 @@
+
+3
+java:S1118"Hide this public constructor.(ø‡ë¯
+6
+java:S3010" Remove this assignment of "bus".(Ä—¦‹
+O
+java:S1612L"9Replace this lambda with method reference 'File::delete'.(šƒ¢è
+d
+java:S4042L"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(šƒ¢è

@@ -1,0 +1,8 @@
+
+W
+java:S1075/"ARefactor your code to get this URI from a customizable parameter.(©âº’
+]	java:S125X"<This block of commented-out lines of code should be removed.(™ìŽáùÿÿÿÿ8ýÂÎ£1
+œ
+java:S1130n"Remove the declaration of thrown exception 'java.security.GeneralSecurityException', as it cannot be thrown from method's body.(‡ÿ¤8Šª˜¤1
+N
+java:S1128"1Remove this unused import 'java.util.Properties'.(¬µŽ²8ÙÝ˜¤1
