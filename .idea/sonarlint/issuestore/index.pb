@@ -31,5 +31,3 @@ _
 /src/main/java/fricke/model/BasketOfColumns.java,6\d\6d8f80ad5b0aa048b7aa7edeac6dbd048f14a15c
 \
 ,src/main/java/fricke/util/WorkBookClass.java,8\3\83f5aaee56319289b658790aab956758b854a651
-`
-0src/main/java/fricke/presenter/TabPresenter.java,f\f\ff510503947dd1504d9ec6621563ffedac12b941
